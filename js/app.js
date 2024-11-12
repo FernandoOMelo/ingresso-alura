@@ -1,7 +1,10 @@
+let edtQuantidade   = document.getElementById('qtd');
+let btnComprar      = document.querySelector('button');
+let cbProdutos      = document.getElementById('tipo-ingresso');
 let qtdPista        = parseInt(document.getElementById('qtd-pista').textContent);
 let qtdCadeiraSup   = parseInt(document.getElementById('qtd-superior').textContent);
 let qtdCadeiraInf   = parseInt(document.getElementById('qtd-inferior').textContent);
-let edtQuantidade   = document.getElementById('qtd');
+
 
 const Ingressos = {
         CadeiraInferior: 0,  
@@ -51,7 +54,7 @@ function comprar(){
         return;
     }
     
-    let Ingresso = document.getElementById('tipo-ingresso').options[document.getElementById('tipo-ingresso').selectedIndex];
+    let Ingresso = cbProdutos.options[cbProdutos.selectedIndex];
     let IDProduto = Ingresso.index;
     let DescProduto = Ingresso.text;
     let Quantidade = parseInt(edtQuantidade.value);
@@ -79,16 +82,28 @@ function vendeIngresso(Ingresso){
             break;
     }
  
-    let temIngresso = validaIngresso(Ingresso.Quantidade, Ingresso.Disponiveis);   
-    if (temIngresso){
+    Vender(Ingresso);
+}
+
+function Vender(Ingresso) {
+    let temIngresso = validaIngresso(Ingresso.Quantidade, Ingresso.Disponiveis);
+    if (temIngresso) {
         edtQuantidade.value = '';
         Ingresso.Disponiveis = (Ingresso.Disponiveis - Ingresso.Quantidade);
         atualizaQtd(Ingresso);
+        alert('Compra bem sucedida!')
     }
-    else{
-        alert(`Ingressos para ${Ingresso.DescProduto} indisponíveis`);
+    else {
+        alert(`Ingressos para ${Ingresso.DescProduto} indisponíveis!`);
         edtQuantidade.value = '';
-        focus(edtQuantidade);
+    }
+    if ((qtdPista == 0) && (qtdCadeiraInf == 0) && (qtdCadeiraSup == 0)){
+        let Texto = document.querySelector('h2');
+        Texto.innerText = 'Ingressos Esgotados!';
+        btnComprar.setAttribute('disabled', true);
+        cbProdutos.setAttribute('disabled', true);
+        edtQuantidade.setAttribute('disabled', true);
+        alert('Poxa os ingressos se esgotaram que pena.')
     }
 }
 
